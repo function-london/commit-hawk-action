@@ -40,4 +40,6 @@ jobs:
       with:
         slack_webhook_url: 'https://hooks.slack.com/services/XYZ'
         slack_message: 'Contents of some important file were changed on main'
+        # Comma separated list of author usernames to filter commits by. Filter will not run if argument is empty
+        username_whitelist: 'USER_A,USER_B'
 ```

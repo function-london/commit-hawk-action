@@ -11,6 +11,9 @@ inputs:
   slack_message:
     description: 'Copy of the Slack message you want to send'
     required: false
+  username_whitelist:
+    description: 'Comma seperated list of usernames that are monitored'
+    required: false
 outputs:
   commits:
     description: 'Commits containing relevant file changes'

@@ -66,12 +66,13 @@ async function getCommits() {
 
 async function run() {
   try {
+    let usernameWhitelist = core.getInput('username_whitelist').split(',');
     getCommits().then(commits => {
       // Exclude merge commits
       commits = commits.filter(c => !c.parents || 1 === c.parents.length);
     
       if ('push' === context.eventName) {
-        commits = commits.filter(c => c.distinct);
+        commits = commits.filter(c => c.distinct && (!usernameWhitelist.length || usernameWhitelist.includes(c.author.username)));
       }
 
       core.setOutput('commits', commits);
