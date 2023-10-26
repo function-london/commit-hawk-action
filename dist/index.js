@@ -1035,9 +1035,8 @@ async function run() {
         commits = commits.filter(c => c.distinct && (!usernameWhitelist.length || usernameWhitelist.includes(c.author.username)));
       }
 
-      info(usernameWhitelist.join(','));
       if (!commits.length) {
-        info('Early return as commits are empty after filters');
+        info(`Early return as commits are empty after filters.  Username of current commit: ${c.author.username}, Whitelist: [${usernameWhitelist.join(',')}]`);
         return;
       }
       core.setOutput('commits', commits);
