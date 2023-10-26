@@ -1032,11 +1032,17 @@ async function run() {
       commits = commits.filter(c => !c.parents || 1 === c.parents.length);
     
       if ('push' === context.eventName) {
-        commits = commits.filter(c => c.distinct && (!usernameWhitelist.length || usernameWhitelist.includes(c.author.username)));
+        commits = commits.filter(c => {
+            let isValid = !usernameWhitelist.length || usernameWhitelist.includes(c.author.username);
+            if (!isValid) {
+                info(`Commit "${c.id}" filtered. Username of current commit: ${c.author.username}, Whitelist: [${usernameWhitelist.join(',')}]`)
+            }
+            return c.distinct && isValid
+        });
       }
 
       if (!commits.length) {
-        info(`Early return as commits are empty after filters.  Username of current commit: ${c.author.username}, Whitelist: [${usernameWhitelist.join(',')}]`);
+        info(`Early return as commits are empty after filters.`);
         return;
       }
       core.setOutput('commits', commits);
