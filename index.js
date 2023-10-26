@@ -75,11 +75,16 @@ async function run() {
         commits = commits.filter(c => c.distinct && (!usernameWhitelist.length || usernameWhitelist.includes(c.author.username)));
       }
 
-      core.setOutput('commits', [usernameWhitelist, commits]);
+      info(usernameWhitelist.join(','));
+      if (!commits.length) {
+        info('Early return as commits are empty after filters');
+        return;
+      }
+      core.setOutput('commits', commits);
 
-      // notifySlack(commits)
-      //   .then(() => process.exitCode = 0)
-      //   .catch(err => core.error(err) && (process.exitCode = 1));
+      notifySlack(commits)
+        .then(() => process.exitCode = 0)
+        .catch(err => core.error(err) && (process.exitCode = 1));
     });
   } catch (error) {
     core.setFailed(error.message);
