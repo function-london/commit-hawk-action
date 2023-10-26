@@ -75,11 +75,11 @@ async function run() {
         commits = commits.filter(c => c.distinct && (!usernameWhitelist.length || usernameWhitelist.includes(c.author.username)));
       }
 
-      core.setOutput('commits', commits);
+      core.setOutput('commits', [usernameWhitelist, commits]);
 
-      notifySlack(commits)
-        .then(() => process.exitCode = 0)
-        .catch(err => core.error(err) && (process.exitCode = 1));
+      // notifySlack(commits)
+      //   .then(() => process.exitCode = 0)
+      //   .catch(err => core.error(err) && (process.exitCode = 1));
     });
   } catch (error) {
     core.setFailed(error.message);
