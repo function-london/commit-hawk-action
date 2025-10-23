@@ -17,8 +17,10 @@ function info(msg, obj = null) {
 	core.info(formatLogMessage(msg, obj));
 }
 
-function debug(msg, obj = null) {
-	core.debug(formatLogMessage(msg, obj));
+function toEpochSeconds(ts) {
+   const d = ts ? new Date(ts) : new Date();
+   const s = Math.floor(d.getTime() / 1000);
+   return Number.isFinite(s) ? s : Math.floor(Date.now() / 1000);
 }
 
 function notifySlack(commits) {
@@ -34,7 +36,7 @@ function notifySlack(commits) {
       title_link: commit['url'],
       footer: 'Commit Hawk',
       footer_icon: 'https://platform.slack-edge.com/img/default_application_icon.png',
-      ts: commit['timestamp'] 
+      ts: toEpochSeconds(commit['timestamp'])
     }
   });
   info(`Ping: ${slack_webhook_url}`, attachments);
